@@ -428,6 +428,15 @@ function PN_API(setup) {
                 ]
             });
         },
+        
+        'subscribedChannels' : function() {
+            return generate_channel_list(CHANNELS);
+        },
+
+        'currentUUID' : function() {
+            return UUID;
+        },
+
         /*
             PUBNUB.history({
                 channel  : 'my_chat_channel',
