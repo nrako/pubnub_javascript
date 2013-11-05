@@ -52,7 +52,7 @@ pubnub_dev_console = function(){
         document.getElementById('error').innerHTML=output;
     }
 
-    var pubnub = PUBNUB.init({
+    var pubnub = PUBNUB({
         'publish_key' : 'demo',
         'subscribe_key' : 'demo'
     });
@@ -76,7 +76,7 @@ pubnub_dev_console = function(){
               document.getElementById('currentAuthKey').innerHTML="current auth key is: " + auth_key;
             }
             d['ssl'] = ssl;
-            pubnub = PUBNUB.init(d);
+            pubnub = PUBNUB(d);
             return "Pubnub Object Initialized";
         },
 
