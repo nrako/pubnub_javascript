@@ -39,7 +39,7 @@ test("set_uuid() should set uuid", function() {
     pubnub.set_uuid("abcd");
     deepEqual(pubnub.get_uuid(), "abcd");
 });
-/*
+
 test("set_uuid() should set uuid and new presence event should come with new uuid", function() {
     expect(2);
     stop(2);
@@ -66,7 +66,7 @@ test("set_uuid() should set uuid and new presence event should come with new uui
         }
     });
 });
-*/
+
 
 
 test("publish() should publish strings without error", function() {
@@ -301,7 +301,7 @@ asyncTest('#history() should call error callback for decryption failure messages
         }
     });
 })
-/*
+
 test('connection restore feature', function() {
     var restore_channel = channel + '-restore-channel';
     expect(2);
@@ -336,7 +336,7 @@ test('connection restore feature', function() {
         }
     });
 })
-*/
+
 
 asyncTest('Encryption tests', function() {
     var aes = PUBNUB.secure({
