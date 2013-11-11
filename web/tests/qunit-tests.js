@@ -116,6 +116,46 @@ test("subscribe() should invoke error callback on decryption error", function() 
     });
 });
 
+test("subscribe() should invoke error callback on invalid subscribe key", function() {
+    var pubnub_invalid_subkey = PUBNUB.init({
+        publish_key   : 'demo',
+        subscribe_key : 'invalid_subkey'
+    });
+    expect(2);
+    stop(1);
+    var ch = channel + '-' + ++count;
+    pubnub_invalid_subkey.subscribe({ channel : ch,
+        callback : function(response) {
+            ok(false, "Callback should not be invoked on invalid subscribe key");
+            start();
+        },
+        error : function(response) {
+            deepEqual(response['message'], "Invalid Subscribe Key");
+            deepEqual(response['error'], true);
+            pubnub_invalid_subkey.unsubscribe({channel : ch});
+            start();
+        }
+    });
+});
+
+test("publish() should get error on invalid publish key", function() {
+    var pubnub_invalid_pubkey = PUBNUB.init({
+        publish_key   : 'invalid_pubkey',
+        subscribe_key : 'demo'
+    });
+    expect(2);
+    stop(1);
+    var ch = channel + '-' + ++count;
+    pubnub_invalid_pubkey.publish({ channel : ch,
+        message  : "Publishing with invalid publish key",
+        callback : function(response) {
+            deepEqual(response[0], 0);
+            deepEqual(response[1], "Invalid Key");
+            start();
+        }
+    });
+});
+
 test("publish() should publish json array without error", function() {
     expect(2);
     stop(2);
@@ -157,6 +197,8 @@ test("publish() should publish json object without error", function() {
         }
     });
 });
+
+
 
 
 asyncTest("#here_now() should show occupancy 1 when 1 user subscribed to channel", function() {
