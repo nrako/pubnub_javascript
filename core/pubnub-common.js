@@ -788,8 +788,6 @@ function PN_API(setup) {
             if (!PUBLISH_KEY)   return error('Missing Publish Key');
             if (!SECRET_KEY)    return error('Missing Secret Key');
 
-            if (jsonp != '0') { data['callback'] = jsonp; }
-
             var timestamp  = Math.floor(new Date().getTime() / 1000)
             ,   sign_input = SUBSCRIBE_KEY + "\n" + PUBLISH_KEY + "\n"
                     + "grant" + "\n"
@@ -816,6 +814,8 @@ function PN_API(setup) {
                 'channel'   : encode(channel),
                 'timestamp' : timestamp
             };
+
+            if (jsonp != '0') { data['callback'] = jsonp; }
 
             if (ttl > -1) data['ttl'] = ttl;
             if (auth_key) data['auth'] = encode(auth_key);
@@ -855,8 +855,6 @@ function PN_API(setup) {
             if (!PUBLISH_KEY)   return error('Missing Publish Key');
             if (!SECRET_KEY)    return error('Missing Secret Key');
 
-            if (jsonp != '0') { data['callback'] = jsonp; }
-
             var timestamp  = Math.floor(new Date().getTime() / 1000)
             ,   sign_input = SUBSCRIBE_KEY + "\n"
                 + PUBLISH_KEY + "\n"
@@ -873,6 +871,8 @@ function PN_API(setup) {
             signature = signature.replace( /\//g, "_" );
 
             var data = { 'signature' : signature, 'timestamp' : timestamp };
+
+            if (jsonp != '0') { data['callback'] = jsonp; }
 
             if (channel)  data['channel'] = encode(channel);
             if (auth_key) data['auth']    = encode(auth_key);
