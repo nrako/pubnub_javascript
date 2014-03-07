@@ -36,7 +36,7 @@ presence_test = function(args) {
            }   
         }
         expect(count * 2 );
-        stop(7);
+        stop(count);
         var test_random_id = Date.now();
         var channels = {
             "channelA" : 'channel-A-' + test_random_id ,
@@ -56,7 +56,7 @@ presence_test = function(args) {
             'pubkey' : keysets[args.keyset]['pubKey'],
             'subkey' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
-            'ssl'    : false,
+            'ssl'    : args.ssl || false,
             'uuid'   : 'actor-' + test_random_id
         });
 
@@ -132,7 +132,7 @@ presence_test = function(args) {
             actor.unsubscribe({
                 channel : channels["channelB"]
             });
-        }, 25000);
+        }, args.wait * 1000);
     })
 }
 
@@ -145,6 +145,22 @@ presence_test({
                         { "channelA" : ["join"]},
                         { "channelB" : ["join"], "channelA"  : ["leave", "join"]},
                         { "channelA" : ["leave"], "channelB" : ["leave", "join"]}
-                    ]
+                    ],
+    wait        : 120
 
 });
+
+presence_test({
+    description : "TEST 2, 3.5 -> 3.5 SSL ON. Agnostic",
+    keyset      : "keyset1",
+    origin      : "pubsub.pubnub.com",
+    checks      :   [
+                        { "channelA" : ["join"]},
+                        { "channelB" : ["join"]},
+                        { "channelA" : ["timeout"]}
+                    ],
+    wait        : 660,
+    ssl         : true
+
+});
+
