@@ -30,11 +30,14 @@ presence_test = function(args) {
                 count += a[i][j].length;
            }   
         }
-        expect(count * 2);
+        expect(count * 2 );
         stop(7);
         var test_random_id = Date.now();
-        var channelA = 'channel-A-' + test_random_id;
-        var channelB = 'channel-B-' + test_random_id;
+        var channels = {
+            "channelA" : 'channel-A-' + test_random_id ,
+            "channelB" : 'channel-B-' + test_random_id
+        };
+
         var step = -1;
 
 
@@ -53,7 +56,7 @@ presence_test = function(args) {
         });
 
         listener.subscribe({
-            channel : channelA + ',' + channelB,
+            channel : channels['channelA'] + ',' + channels['channelB'],
             callback : console.log,
             presence : function(r,raw_data) {
                 var channel = raw_data[2].split('-pnpres')[0];
@@ -68,21 +71,30 @@ presence_test = function(args) {
 
                 var check = args.checks[step];
 
-                if (check["channelA"]) {
-                    if (action in check["channelA"]) ok(true,"action in checks list");
+                if (channel == channels["channelA"] && check["channelA"]) {
+                    if (action in check["channelA"])
+                        ok(true,"action in checks list");
+                    else {
+                        ok(false, "action not in checks list, " + ", STEP : " + step + " CHANNEL : " + channel + ", ACTION : " + action);
+                        console.log(JSON.stringify(check["channelA"]));
+                    }
                 }
-                if (check["channelB"]) {
-                    if (action in check["channelA"]) ok(true,"action in checks list");
+                if (channel == channels["channelB"] && check["channelB"]) {
+                    if (action in check["channelB"])
+                        ok(true,"action in checks list");                    
+                    else {
+                        ok(false, "action not in checks list, " + ", STEP : " + step + " CHANNEL : " + channel + ", ACTION : " + action);
+                        console.log(JSON.stringify(check["channelB"]));
+                    }
                 }
-
                 start();
-                
             }
+                
         });
 
         setTimeout(function(){
             actor.subscribe({
-                channel  : channelA,
+                channel  : channels["channelA"],
                 callback : console.log,
                 error    : console.log
             });
@@ -91,7 +103,7 @@ presence_test = function(args) {
 
         setTimeout(function(){
             actor.subscribe({
-                channel  : channelB,
+                channel  : channels["channelB"],
                 callback : console.log,
                 error    : console.log
             });
@@ -101,7 +113,7 @@ presence_test = function(args) {
 
         setTimeout(function(){
             actor.unsubscribe({
-                channel  : channelA
+                channel  : channels["channelA"]
             });
             step++;
         }, 15000);
@@ -109,13 +121,13 @@ presence_test = function(args) {
         setTimeout(function(){
             step++;
             listener.unsubscribe({
-                channel : channelA
+                channel : channels["channelA"]
             });
             listener.unsubscribe({
-                channel : channelB
+                channel : channels["channelB"]
             });
             actor.unsubscribe({
-                channel : channelB
+                channel : channels["channelB"]
             });
         }, 25000);
     })
