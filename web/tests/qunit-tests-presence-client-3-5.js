@@ -35,7 +35,7 @@ presence_test = function(args) {
                 count += a[i][j].length;
            }   
         }
-        expect(count * 2 );
+        expect(count);
         stop(count);
         var test_random_id = Date.now();
         var channels = {
@@ -68,9 +68,7 @@ presence_test = function(args) {
                 var action = r.action;
                 var uuid = r.uuid;
 
-                if (uuid == listener.get_uuid()) return;
-
-                deepEqual(uuid,actor.get_uuid());
+                if (uuid != actor.get_uuid()) return;
 
                 console.log('STEP : ' + step + ', CHANNEL : ' + channel + ', ACTION : ' + action + ', UUID : ' + uuid);
 
@@ -164,3 +162,16 @@ presence_test({
 
 });
 
+presence_test({
+    description : "TEST 3, 3.5 -> 3.6 SSL ON, Compat On",
+    keyset      : "keyset1",
+    origin      : "presence-beta.pubnub.com",
+    checks      :   [
+        { "channelA" : ["join"]},
+        { "channelB" : ["join"]},
+        { "channelA" : ["timeout"]}
+    ],
+    wait        : 960,
+    ssl         : true
+
+});
