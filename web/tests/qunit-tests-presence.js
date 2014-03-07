@@ -19,6 +19,11 @@ var keysets = {
 };
 
 
+function isInArray(array, search)
+{
+    return (array.indexOf(search) >= 0) ? true : false; 
+}
+
 presence_test = function(args) {
 
     test(args.description,function(){
@@ -72,19 +77,17 @@ presence_test = function(args) {
                 var check = args.checks[step];
 
                 if (channel == channels["channelA"] && check["channelA"]) {
-                    if (action in check["channelA"])
+                    if (isInArray(check["channelA"],action))
                         ok(true,"action in checks list");
                     else {
                         ok(false, "action not in checks list, " + ", STEP : " + step + " CHANNEL : " + channel + ", ACTION : " + action);
-                        console.log(JSON.stringify(check["channelA"]));
                     }
                 }
                 if (channel == channels["channelB"] && check["channelB"]) {
-                    if (action in check["channelB"])
+                    if (isInArray(check["channelB"],action))
                         ok(true,"action in checks list");                    
                     else {
                         ok(false, "action not in checks list, " + ", STEP : " + step + " CHANNEL : " + channel + ", ACTION : " + action);
-                        console.log(JSON.stringify(check["channelB"]));
                     }
                 }
                 start();
