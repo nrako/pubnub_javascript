@@ -47,14 +47,14 @@ presence_test = function(args) {
 
 
         var listener = PUBNUB.init({
-            'pubkey' : keysets[args.keyset]['pubKey'],
-            'subkey' : keysets[args.keyset]['subKey'],
+            'publish_key' : keysets[args.keyset]['pubKey'],
+            'subscribe_key' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
             'uuid'   : 'listener-' + test_random_id
         });
         var actor = PUBNUB.init({
-            'pubkey' : keysets[args.keyset]['pubKey'],
-            'subkey' : keysets[args.keyset]['subKey'],
+            'publish_key' : keysets[args.keyset]['pubKey'],
+            'subscribe_key' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
             'ssl'    : args.ssl || false,
             'uuid'   : 'actor-' + test_random_id
@@ -94,29 +94,29 @@ presence_test = function(args) {
         });
 
         setTimeout(function(){
+            step++;
             actor.subscribe({
                 channel  : channels["channelA"],
                 callback : console.log,
                 error    : console.log
             });
-            step++;
         },5000);
 
         setTimeout(function(){
+            step++;
             actor.subscribe({
                 channel  : channels["channelB"],
                 callback : console.log,
                 error    : console.log
             });
-            step++;
         }, 10000);
 
 
         setTimeout(function(){
+            step++;
             actor.unsubscribe({
                 channel  : channels["channelA"]
             });
-            step++;
         }, 15000);
 
         setTimeout(function(){

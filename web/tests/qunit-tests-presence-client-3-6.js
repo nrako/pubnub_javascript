@@ -38,23 +38,25 @@ presence_test = function(args) {
         expect(count);
         stop(count);
         var test_random_id = Date.now();
+
         var channels = {
-            "channelA" : 'channel-A-' + test_random_id ,
-            "channelB" : 'channel-B-' + test_random_id
+            "channelA" : args['channelA'] || 'channel-A-' + test_random_id ,
+            "channelB" : args['channelB'] || 'channel-B-' + test_random_id
         };
+
 
         var step = -1;
 
 
         var listener = PUBNUB.init({
-            'pubkey' : keysets[args.keyset]['pubKey'],
-            'subkey' : keysets[args.keyset]['subKey'],
+            'publish_key' : keysets[args.keyset]['pubKey'],
+            'subscribe_key' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
             'uuid'   : 'listener-' + test_random_id
         });
         var actor = PUBNUB.init({
-            'pubkey' : keysets[args.keyset]['pubKey'],
-            'subkey' : keysets[args.keyset]['subKey'],
+            'publish_key' : keysets[args.keyset]['pubKey'],
+            'subscribe_key' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
             'ssl'    : args.ssl || false,
             'uuid'   : 'actor-' + test_random_id
@@ -64,6 +66,8 @@ presence_test = function(args) {
             channel : channels['channelA'] + ',' + channels['channelB'],
             callback : console.log,
             presence : function(r,raw_data) {
+                console.log(JSON.stringify(r));
+                console.log(JSON.stringify(raw_data));
                 var channel = raw_data[2].split('-pnpres')[0];
                 var action = r.action;
                 var uuid = r.uuid;
@@ -94,30 +98,33 @@ presence_test = function(args) {
         });
 
         setTimeout(function(){
+            step++;
             actor.subscribe({
                 channel  : channels["channelA"],
                 callback : console.log,
                 error    : console.log
             });
-            step++;
+
         },5000);
 
         setTimeout(function(){
+            step++;
             actor.subscribe({
                 channel  : channels["channelB"],
                 callback : console.log,
                 error    : console.log
             });
-            step++;
-        }, 10000);
+
+        }, 15000);
 
 
         setTimeout(function(){
+            step++;
             actor.unsubscribe({
                 channel  : channels["channelA"]
             });
-            step++;
-        }, 15000);
+
+        }, 25000);
 
         setTimeout(function(){
             step++;
