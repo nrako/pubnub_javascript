@@ -150,17 +150,30 @@ presence_test({
 
 });
 
+//presence_test({
+//    description : "TEST 2, 3.5 -> 3.5 SSL ON. Agnostic",
+//    keyset      : "keyset1",
+//    origin      : "pubsub.pubnub.com",
+//    checks      :   [
+//                        { "channelA" : ["join"]},
+//                        { "channelB" : ["join"]},
+//                        { "channelA" : ["timeout"]}
+//                    ],
+//    wait        : 660,
+//    ssl         : true
+//
+//});
+
 presence_test({
-    description : "TEST 2, 3.5 -> 3.5 SSL ON. Agnostic",
+    description : "TEST 3, 3.5 -> 3.6 SSL ON, Compat On",
     keyset      : "keyset1",
-    origin      : "pubsub.pubnub.com",
+    origin      : "presence-beta.pubnub.com",
     checks      :   [
-                        { "channelA" : ["join"]},
-                        { "channelB" : ["join"]},
-                        { "channelA" : ["timeout"]}
-                    ],
-    wait        : 660,
+        { "channelA" : ["join"]},
+        { "channelB" : ["join"]},
+        { "channelA" : ["timeout"]}
+    ],
+    wait        : 960,
     ssl         : true
 
 });
-
