@@ -19,29 +19,38 @@ var keysets = {
 };
 
 
-presence_test = function(description, keyset, origin) {
+presence_test = function(args) {
 
     test(args.description,function(){
-        expect(9);
+
+        var count = 0;
+        var a = args.checks;
+        for ( var i in a) {
+           for ( var j in a[i]) {
+                count += a[i][j].length;
+           }   
+        }
+        expect(count * 2);
         stop(7);
         var test_random_id = Date.now();
         var channelA = 'channel-A-' + test_random_id;
         var channelB = 'channel-B-' + test_random_id;
         var step = -1;
 
-        listener = PUBNUB.init({
+
+        var listener = PUBNUB.init({
             'pubkey' : keysets[args.keyset]['pubKey'],
             'subkey' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
             'uuid'   : 'listener-' + test_random_id
-        })
-        actor = PUBNUB.init({t
+        });
+        var actor = PUBNUB.init({
             'pubkey' : keysets[args.keyset]['pubKey'],
             'subkey' : keysets[args.keyset]['subKey'],
-            'origin' : origin,
+            'origin' : args.origin,
             'ssl'    : false,
             'uuid'   : 'actor-' + test_random_id
-        })
+        });
 
         listener.subscribe({
             channel : channelA + ',' + channelB,
@@ -57,46 +66,25 @@ presence_test = function(description, keyset, origin) {
 
                 console.log('STEP : ' + step + ', CHANNEL : ' + channel + ', ACTION : ' + action + ', UUID : ' + uuid);
 
-                switch(step) {
-                    case 0:
-                    var check = args.check[0];
+                var check = args.checks[step];
 
-
-                        if (check["channelA"]) {
-                            if (action in check["channelA"]) ok(true,"action in checks list");
-                        }
-                        if (check["channelB"]) {
-                            if (action in check["channelA"]) ok(true,"action in checks list");
-                        }
-
-                        start();
-                    break;
-                    case 1:
-                        if (channel == channelA) {
-                            ok(action == "join" || action == "leave", "join and leave on A");
-                            start();
-                        } else {
-                            deepEqual(action,"join");
-                            start();
-                        }
-                    break;
-                    case 2:
-                        if (channel == channelA) {
-                            deepEqual(action,"leave");
-                            start();
-                        } else {
-                            ok(action == "join" || action == "leave", "join and leave on B");
-                            start();
-                        }
-                    break;
+                if (check["channelA"]) {
+                    if (action in check["channelA"]) ok(true,"action in checks list");
                 }
+                if (check["channelB"]) {
+                    if (action in check["channelA"]) ok(true,"action in checks list");
+                }
+
+                start();
+                
             }
-        })
+        });
 
         setTimeout(function(){
             actor.subscribe({
                 channel  : channelA,
-                callback : console.log
+                callback : console.log,
+                error    : console.log
             });
             step++;
         },5000);
@@ -104,7 +92,8 @@ presence_test = function(description, keyset, origin) {
         setTimeout(function(){
             actor.subscribe({
                 channel  : channelB,
-                callback : console.log
+                callback : console.log,
+                error    : console.log
             });
             step++;
         }, 10000);
@@ -132,7 +121,8 @@ presence_test = function(description, keyset, origin) {
     })
 }
 
-presence_test(
+
+presence_test({
     description : "3.5 -> 3.5 Base Compatibility, SSL Off.",
     keyset      : "keyset1",
     origin      : "pubsub.pubnub.com",
@@ -142,4 +132,4 @@ presence_test(
                         { "channelA" : ["leave"], "channelB" : ["leave", "join"]}
                     ]
 
-);
+});
