@@ -52,12 +52,14 @@ presence_test = function(args) {
             'publish_key' : keysets[args.keyset]['pubKey'],
             'subscribe_key' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
+            'noheresync' : true,
             'uuid'   : 'listener-' + test_random_id
         });
         var actor = PUBNUB.init({
             'publish_key' : keysets[args.keyset]['pubKey'],
             'subscribe_key' : keysets[args.keyset]['subKey'],
             'origin' : args.origin,
+            'noheresync' : true,
             'ssl'    : args.ssl || false,
             'uuid'   : 'actor-' + test_random_id
         });
@@ -66,8 +68,6 @@ presence_test = function(args) {
             channel : channels['channelA'] + ',' + channels['channelB'],
             callback : console.log,
             presence : function(r,raw_data) {
-                console.log(JSON.stringify(r));
-                console.log(JSON.stringify(raw_data));
                 var channel = raw_data[2].split('-pnpres')[0];
                 var action = r.action;
                 var uuid = r.uuid;
@@ -166,5 +166,19 @@ presence_test({
                     ],
     wait        : 120,
     ssl         : false
+});
+
+
+presence_test({
+    description : "TEST 9, 3.6 -> 3.6 Compat On, SSL ON.",
+    keyset      : "keyset1",
+    origin      : "presence-beta.pubnub.com",
+    checks      :   [
+                        { "channelA" : ["join"]},
+                        { "channelB" : ["join"]},
+                        { "channelA" : ["leave","join","timeout"]}
+                    ],
+    wait        : 900,
+    ssl         : true
 });
 
