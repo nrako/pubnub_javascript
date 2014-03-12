@@ -57,6 +57,13 @@ var keysets = {
         "subKey": "sub-c-d91ee366-9dbd-11e3-a759-02ee2ddab7fe",
         "secKey": "sec-c-ZDUxZGEyNmItZjY4Ny00MjJmLWE0MjQtZTQyMDM0NTY2MDVk",
         "description": "Compatibility Mode OFF"
+    },
+
+    "keyset3": {
+        "pubKey": "pub-c-9ff993f5-29c9-46a8-99ff-946be9458f79",
+        "subKey": "sub-c-243e7b0e-9db4-11e3-a759-02ee2ddab7fe",
+        "secKey": "sec-c-OTczMWIyYmItMzFlNy00ZTg2LWFkNGUtMGYyYWM3NGFjOGQy",
+        "description": "Compatibility Mode OFF, Debounce 300"
     }
 };
 
@@ -356,7 +363,7 @@ var tests = [
             "description": "(6) Test 7: 3.6 -> 3.6 Compat Off, SSL On.",
             "client": "3.6",
             "server": "3.6",
-            "keyset": keysets.keyset2,
+            "keyset": keysets.keyset3,
             "ssl": true
         },
 
@@ -374,7 +381,7 @@ var tests = [
             0: {
                 "actor": ["subscribe", channelA, 0],
                 "listener": [
-                    ["join", channelA, 5000]
+                    ["join", channelA, 720000]
                 ]                  // [should get this event, on channel ch, within this many seconds]
             },
 
@@ -382,7 +389,7 @@ var tests = [
                 "actor": ["subscribe", channelB, 0],
 
                 "listener": [
-                    ["join", channelB, 5000]
+                    ["join", channelB, 720000]
                 ]                                               // when more than two rules are in an array, they:
                 // can happen in any order
                 // must both happen, in order for that step to pass
@@ -391,7 +398,7 @@ var tests = [
             2: {
                 "actor": ["unsubscribe", channelA, 0],
                 "listener": [
-                    ["leave", channelA, 120000]
+                    ["leave", channelA, 720000]
                 ]
             }
         }
@@ -812,7 +819,7 @@ function pnInit(ssl, key, isListener) {
         uuid: uuid
     });
 
-    console.log(uuid + ": " + key + "\nOrigin: " + origin + "\nClient level: " + clientLevel + "\nServer level: " + serverLevel + "\nCompat: " + true + "\nClient extra compat flag: " + extraCompat + "\nSSL: " + ssl);
+    console.log(uuid + ": " + key + ", Origin: " + origin + ", Client level: " + clientLevel + ", Server level: " + serverLevel + ", Compat: " + true + ", Client extra compat flag: " + extraCompat + ", SSL: " + ssl);
     return pubnub;
 }
 
@@ -821,7 +828,7 @@ function waitForPNLoad() {
         console.log("Waiting for PN to finish loading.");
         //pnLoadedInterval = setInterval(waitForPNLoad, 1000);
     } else {
-        console.log("\nInitializing listener and actor instances.");
+        console.log("Initializing listener and actor instances.");
         clearInterval(pnLoadedInterval);
 
         randomSuffix = Math.floor((Math.random() * 10000) + 1);
@@ -838,7 +845,7 @@ function waitForPNLoad() {
 
 
 function initTest(testNub) {
-    console.log("Running test: " + testNub.common.description + "\n");
+    console.log("Running test: " + testNub.common.description);
     currentTest = testNub;
     ssl = testNub.common.ssl;
     clientLevel = testNub.common.client;
@@ -864,7 +871,7 @@ function waitForStepInProgress() {
     } else {
         clearInterval(stepInProgressInterval);
 
-        console.log("\n" + new Date + ": step " + currentStep + " complete.");
+        console.log("" + new Date + ": step " + currentStep + " complete.");
 
         if (!testResults[currentStep]) {
             testResults.push([
@@ -874,7 +881,7 @@ function waitForStepInProgress() {
 
         for (a = 0; a < testResults[currentStep].length; a++) {
             var stringResults = JSON.stringify(testResults[currentStep][a]);
-            console.log("\nStep " + currentStep + " results: " + stringResults + "\n");
+            console.log("Step " + currentStep + " results: " + stringResults);
         }
 
         currentStep++;
@@ -883,7 +890,7 @@ function waitForStepInProgress() {
 }
 
 function startCurrentTest() {
-    console.log("\nStarting test: " + currentTest.common.description);
+    console.log("Starting test: " + currentTest.common.description);
     alreadyConnected = false;
     numberOfSteps = Object.keys(currentTest.steps).length;
 
@@ -901,7 +908,7 @@ function logResultSummary() {
 
 function analyzeResults() {
 
-    for (step = 0; step < testResults.length; step++) {
+    for (step = 0; step < numberOfSteps; step++) {
 
         var numExpectedResults = currentTest.steps[step].listener.length;
         var numActualResults = testResults[step].length
@@ -925,7 +932,7 @@ function analyzeResults() {
             playSound('beep');
             var row = document.getElementById('row-' + currentTestId);
             row.className = "pass";
-            console.log("\nPASS: Step " + step + " numbers of actual/expected results are equal (" + numActualResults + ")\n");
+            console.log("PASS: Step " + step + " numbers of actual/expected results are equal ("+ numActualResults + ")");
 
             while (expectedTempArray.length > 0) {
                 var actualIndex = actualTempArray.indexOf(expectedTempArray[0]);
@@ -938,18 +945,18 @@ function analyzeResults() {
             }
 
             if (expectedTempArray.length == 0 && actualTempArray.length == 0) {
-                console.log("\nPASS: Step " + step + " literal results are equal.\n");
+                console.log("PASS: Step " + step + " literal results are equal.");
             } else {
                 row.className = "fail";
-                console.log("\nFAIL: Step " + step + " literal results are NOT equal. Actual results that differed from expected are:");
-                console.log(JSON.stringify(actualTempArray) + "\n");
+                console.log("FAIL: Step " + step + " literal results are NOT equal. Actual results that differed from expected are:");
+                console.log(JSON.stringify(actualTempArray));
             }
         }
 
         else {
             var row = document.getElementById('row-' + currentTestId);
             row.className = "fail";
-            console.log("\FAIL: Step " + step + " numbers of actual/expected results are equal (" + numActualResults + ")\n");
+            console.log("FAIL: Step " + step + " numbers of actual/expected results are equal ("+ numActualResults + ")");
         }
     }
 }
@@ -960,21 +967,21 @@ function startNextStep() {
     maxWaitTime = 0;
 
     if (currentStep + 1 > numberOfSteps) {
-        console.log("\n*** All Test Steps Complete! ***\n");
+        console.log("*** All Test Steps Complete! ***");
 
-        console.log("\nSummary of test results:");
+        console.log("Summary of test results:");
         logResultSummary();
         analyzeResults();
         return;
     }
 
-    console.log("\nStep " + (currentStep) + ".");
+    console.log("Step " + (currentStep) + ".");
 
     var actorDelay = currentTest.steps[currentStep].actor[2];
     var actorAction = currentTest.steps[currentStep].actor[0];
     var actorChannel = currentTest.steps[currentStep].actor[1];
 
-    console.log("\nActor should wait " + actorDelay + " seconds to " + actorAction + " to channel " + actorChannel);
+    console.log("Actor should wait " + actorDelay + " seconds to " + actorAction + " to channel " + actorChannel);
     console.log("-- Then --");
 
     for (a = 0; a < currentTest.steps[currentStep].listener.length; a++) {
@@ -989,7 +996,7 @@ function startNextStep() {
         }
     }
 
-    console.log("maxWaitTime set to: " + maxWaitTime + "\n");
+    console.log("maxWaitTime set to: " + maxWaitTime);
 
     stepInProgressInterval = setInterval(waitForStepInProgress, 5000);
 
@@ -997,7 +1004,7 @@ function startNextStep() {
         stepInProgress = false;
     }, maxWaitTime);
 
-    console.log("\n" + new Date + ": Starting step " + currentStep);
+    console.log("" + new Date + ": Starting step " + currentStep);
 
     if (currentStep == 0) {
         var initListener = true;
