@@ -364,6 +364,7 @@ function PN_API(setup) {
         return count;
     }
     function _invoke_callback(response, callback, err) {
+        console.log('_invoke_callback 1');
         if (typeof response == 'object') {
             if (response['error'] && response['message'] && response['payload']) {
                 err({'message' : response['message'], 'payload' : response['payload']});
@@ -374,6 +375,8 @@ function PN_API(setup) {
                 return;
             }
         }
+        console.log('_invoke_callback 2');
+        console.log(JSON.stringify(response));
         callback(response);
     }
 
