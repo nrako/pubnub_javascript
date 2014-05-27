@@ -264,9 +264,9 @@ function ajax( setup ) {
             loaded = 1;
 
             clearTimeout(timer);
-
+            console.log(xhr.responseText);
             try       { response = JSON['parse'](xhr.responseText); }
-            catch (r) { return done(1); }
+            catch (r) { console.log('exception');console.log(r);return done(1); }
 
             complete = 1;
             success(response);
