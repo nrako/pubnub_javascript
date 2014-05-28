@@ -66,6 +66,7 @@ pubnub_dev_console = function(){
     }
 
     var pubnub = PUBNUB.init({
+        'origin' : 'dara.devbuild.pubnub.com',
         'publish_key' : 'demo',
         'subscribe_key' : 'demo'
     });
