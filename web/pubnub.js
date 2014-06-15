@@ -2949,7 +2949,7 @@ function ajax( setup ) {
             //console.log(e.data);
             //console.log(e.data.responseText);
             console.log(xhr);
-            //done(1, xhr.responseText || { "error" : "Network Connection Error"})
+            done(1, xhr.responseText || { "error" : "Network Connection Error"})
         };
         xhr.onload  = xhr.onloadend = finished;
         xhr.onreadystatechange = function() {
