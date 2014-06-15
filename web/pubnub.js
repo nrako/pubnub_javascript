@@ -2940,9 +2940,10 @@ function ajax( setup ) {
               new XDomainRequest()  ||
               new XMLHttpRequest();
 
-        xhr.onerror = xhr.onabort   = function(){
+        xhr.onerror = xhr.onabort   = function(e){
             console.log('Status: ' + xhr.status);
             console.log('Response: ' + xhr.responseText);
+            console.log(JSON.stringify(e));
             console.log(JSON.stringify(xhr));
             done(1, xhr.responseText || { "error" : "Network Connection Error"})
         };
