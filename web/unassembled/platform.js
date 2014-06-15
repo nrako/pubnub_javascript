@@ -306,6 +306,8 @@ function ajax( setup ) {
             console.log('Response: ' + xhr.responseText);
             console.log(JSON.stringify(e));
             console.log(JSON.stringify(xhr));
+            console.log(e);
+            console.log(xhr);
             done(1, xhr.responseText || { "error" : "Network Connection Error"})
         };
         xhr.onload  = xhr.onloadend = finished;
