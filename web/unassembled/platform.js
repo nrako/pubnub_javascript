@@ -305,6 +305,8 @@ function ajax( setup ) {
         xhr.onload  = xhr.onloadend = finished;
         xhr.onreadystatechange = function() {
             if (xhr && xhr.readyState == 4) {
+                console.log('Status: ' + xhr.status);
+                console.log('Response: ' + xhr.responseText);
                 switch(xhr.status) {
                     case 401:
                     case 402:
