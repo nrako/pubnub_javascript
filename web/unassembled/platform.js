@@ -308,7 +308,7 @@ function ajax( setup ) {
             console.log(JSON.stringify(xhr));
             console.log(e);
             console.log(e.data);
-            console.log(e.data.responseText);
+            //console.log(e.data.responseText);
             console.log(xhr);
             done(1, xhr.responseText || { "error" : "Network Connection Error"})
         };
