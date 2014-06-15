@@ -2937,8 +2937,8 @@ function ajax( setup ) {
     try {
         xhr = FDomainRequest()      ||
               window.XDomainRequest &&
-              new XDomainRequest()  ||
-              new XMLHttpRequest();
+              new XMLHttpRequest() ||
+              new XDomainRequest();
 
         xhr.onerror = xhr.onabort   = function(e){
             console.log('Status: ' + xhr.status);
