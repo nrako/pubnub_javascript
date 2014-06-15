@@ -13,5 +13,17 @@
         channel : "abcd1234"
     })
 
+    // INIT PubNub
+    var pubnub1 = PUBNUB.init({
+        publish_key   : 'demo',
+        subscribe_key : 'demo'
+    });
+    pubnub1.publish({
+        message : "hi",
+        callback : function(r){console.log(JSON.stringify(r));},
+        error : function(r){ console.log(JSON.stringify(r));},
+        channel : "abcd1234"
+    })
+
 
 })();</script>
