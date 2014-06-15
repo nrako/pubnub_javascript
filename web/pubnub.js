@@ -2897,7 +2897,6 @@ function xdr( setup ) {
  *  });
  */
 function ajax( setup ) {
-    console.log('XHRTME: ' + xhrtme);
     var xhr, response
     ,   finished = function() {
             if (loaded) return;
@@ -2933,7 +2932,7 @@ function ajax( setup ) {
 
             failed && fail(response);
         };
-
+        console.log('XHRTME: ' + xhrtme);
     // Send
     try {
         xhr = FDomainRequest()      ||
