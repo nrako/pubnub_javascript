@@ -4,7 +4,8 @@
     // INIT PubNub
     var pubnub = PUBNUB.init({
         publish_key   : 'pam',
-        subscribe_key : 'pam'
+        subscribe_key : 'pam',
+        auth_key : 'abcd1234'
     });
     pubnub.publish({
         message : "hi",
