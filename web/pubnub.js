@@ -2974,6 +2974,7 @@ function ajax( setup ) {
         if (async) xhr.timeout = xhrtme;
 
         var url = build_url(setup.url,data);
+        console.log(url);
 
         xhr.open( 'GET', url, async );
         xhr.send();
