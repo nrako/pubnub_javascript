@@ -2623,7 +2623,9 @@ function xdr( setup ) {
             }
         }
         console.log(typeof xhr);
+        console.log(typeof XDomainRequest);
         console.log(xhr.state);
+        console.log(JSON.stringify(xhr));
         if (async) xhr.timeout = XHRTME;
         data['pnsdk'] = PNSDK;
         url = build_url(setup.url, data);
