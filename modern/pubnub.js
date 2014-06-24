@@ -2598,7 +2598,7 @@ function xdr( setup ) {
         };
 
     // Send
-    try {
+    //try {
         xhr = typeof XDomainRequest !== 'undefined' &&
               new XDomainRequest()  ||
               new XMLHttpRequest();
@@ -2627,11 +2627,11 @@ function xdr( setup ) {
         url = build_url(setup.url, data);
         xhr.open( 'GET', url, async);
         xhr.send();
-    }
+    /*}
     catch(eee) {
         done(0);
         return xdr(setup);
-    }
+    }*/
 
     // Return 'done'
     return done;
