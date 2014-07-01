@@ -1267,6 +1267,56 @@ function PN_API(setup) {
                 fail     : function(response) { _invoke_error(response, err); }
             });
         },
+        'registry' : function(args) {
+        
+            var callback = args['callback'] || callback
+            ,   err      = args['error']    || function(){}
+            ,   data     = { 'auth' : auth_key }
+            ,   jsonp    = jsonp_cb()
+            ,   namespace = args['namespace']
+            ,   registry_id = args['registry_id']
+            ,   add_channels = args['add_channels']
+            ,   remove_channels = args['remove_channels']
+            ,   remove_regid = args['remove_registration_id'];
+
+            var url  =  [
+                            STD_ORIGIN, 'v1', 'channel-registration',
+                            'sub-key', SUBSCRIBE_KEY
+                        ];
+            if (user) {
+                url.append('user').append(encode(namespace));
+            }
+            
+            url.append('channel-registry');
+
+            if (registry_id) {
+                url.append(encode(registry_id));
+            }
+
+            if (add_channels) {
+                add_channels = (isArray(add_channels))?add_channels.join(','):add_channels;
+                data['add'] = encode(add_channels);
+                
+            } else if (remove_channels) {
+                remove_channels = (isArray(remove_channels))?remove_channels.join(','):remove_channels;
+                data['remove'] = encode(remove_channels);
+            } else if (remove_regid) {
+                url.append('remove');
+            }
+            
+            if (jsonp != '0') { data['callback'] = jsonp; }
+            
+            xdr({
+                callback : jsonp,
+                data     : _get_url_params(data),
+                timeout  : SECOND * 5,
+                url      : url,
+                success  : function(response) {
+                    _invoke_callback(response, callback, err);
+                },
+                fail     : function(response) { _invoke_error(response, err); }
+            });
+        },
 
         // Expose PUBNUB Functions
         'xdr'           : xdr,
