@@ -46,6 +46,7 @@ describe('Pubnub', function() {
     this.timeout(180000);
     
     describe('#subscribe()', function(){
+        
         it('should pass plain text to callback on decryption error', function(done){
             var ch = channel + '-' + ++count;
             pubnub_enc.subscribe({channel : ch ,
@@ -69,6 +70,56 @@ describe('Pubnub', function() {
 
             })
         })
+    })
+
+    describe('#registry()', function() {
+        var pubnub = PUBNUB.init({
+            publish_key   : 'demo',
+            subscribe_key : 'demo',
+            origin        : 'pubsub.pubnub.com'
+        });
+
+        it('should be able to get channel registry ids', function(done) {
+            assert.ok(false);
+            done();
+        })
+        it('should be able to get channel registry ids by namespace', function(done) {
+            assert.ok(false);
+            done();
+        })
+        it('should be able to get all channels for registration id', function(done){
+            assert.ok(false);
+            done();
+        })
+        it('should be able to get all channels for registration id and namespace', function(done){
+            assert.ok(false);
+            done();
+        })
+        it('should be able to add channels to registration id', function(done){
+            assert.ok(false);
+            done();
+        })
+        it('should be able to add channels to registration id and namespace', function(done){
+            assert.ok(false);
+            done();
+        })
+        it('should be able to remove channels from registration id', function(done){
+            assert.ok(false);
+            done();
+        })
+        it('should be able to remove channels from registration id and namespace', function(done){
+            assert.ok(false);
+            done();
+        }) 
+        it('should be able to remove registration id', function(done){
+            assert.ok(false);
+            done();
+        })
+        it('should be able to remove registration id and namespace', function(done){
+            assert.ok(false);
+            done();
+        }) 
+
     })
 
     describe('#publish()', function(){
