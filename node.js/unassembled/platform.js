@@ -123,7 +123,10 @@ function xdr( setup ) {
     var origin       = setup.url[0].split("//")[1]
 
     options.hostname = proxy ? proxy.hostname : setup.url[0].split("//")[1];
-    options.port     = proxy ? proxy.port : ssl ? 443 : 80;
+    var h            = options.hostname.split(":");
+    options.hostname = h[0];
+    options.port     = h[1]; 
+    options.port     = proxy ? proxy.port : (options.port)?options.port:ssl ? 443 : 80;
     options.path     = proxy ? "http://" + origin + url:url;
     options.headers  = proxy ? { 'Host': origin }:null;
     options.method   = mode;
@@ -134,8 +137,8 @@ function xdr( setup ) {
     try {
         request = (ssl ? https : http)['request'](options, function(response) {
             response.setEncoding('utf8');
-            response.on( 'error', function(){console.log('error');done(1, body || { "error" : "Network Connection Error"})});
-            response.on( 'abort', function(){console.log('abort');done(1, body || { "error" : "Network Connection Error"})});
+            response.on( 'error', function(r){done(1, body || { "error" : "Network Connection Error"})});
+            response.on( 'abort', function(r){done(1, body || { "error" : "Network Connection Error"})});
             response.on( 'data', function (chunk) {
                 if (chunk) body += chunk;
             } );
@@ -159,7 +162,7 @@ function xdr( setup ) {
             });
         });
         request.timeout = xhrtme;
-        request.on( 'error', function() {
+        request.on( 'error', function(r) {
             done( 1, {"error":"Network Connection Error"} );
         } );
 

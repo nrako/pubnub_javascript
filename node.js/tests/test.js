@@ -76,48 +76,417 @@ describe('Pubnub', function() {
         var pubnub = PUBNUB.init({
             publish_key   : 'demo',
             subscribe_key : 'demo',
-            origin        : 'pubsub.pubnub.com'
+            origin        : '54.188.10.166:9000'
         });
 
         it('should be able to get channel registry ids', function(done) {
-            assert.ok(false);
-            done();
+            var channel = 'a-' + Math.random();
+            var reg_id = 'reg-' + Math.random();
+            pubnub.registry({
+                'registry_id' : reg_id,
+                'add_channels' : [channel],
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'callback'      : function(r) {
+                            assert.ok(in_list_deep(r, channel));
+                            done();
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to get channel registry ids by namespace', function(done) {
-            assert.ok(false);
-            done();
+            var channel = 'a-' + Math.random();
+            var reg_id = 'reg-' + Math.random();
+            var user_id = 'user-' + Math.random();
+            pubnub.registry({
+                'registry_id'   : reg_id,
+                'namespace'          : user_id,
+                'add_channels'  : [channel],
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'namespace'       : user_id,
+                        'callback'      : function(r) {
+                            assert.ok(in_list_deep(r, channel));
+                            done();
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to get all channels for registration id', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id = 'reg-' + Math.random();
+            pubnub.registry({
+                'registry_id' : reg_id,
+                'add_channels' : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            done();
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to get all channels for registration id and namespace', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id   = 'reg-' + Math.random();
+            var user_id  = 'user-' + Math.random();
+            pubnub.registry({
+                'registry_id'   : reg_id,
+                'namespace'          : user_id,
+                'add_channels'  : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'namespace'       : user_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            done();
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to add channels to registration id', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id = 'reg-' + Math.random();
+            pubnub.registry({
+                'registry_id' : reg_id,
+                'add_channels' : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            var channel = 'd-' + Math.random();
+                            channels.push(channel);
+                            pubnub.registry({
+                                'add_channels' : [channel],
+                                'registry_id'       : reg_id,
+                                'callback' : function(r) {
+                                    pubnub.registry({
+                                        'registry_id' : reg_id,
+                                        'callback' : function(r) {
+                                            assert.deepEqual(r, channels);
+                                            done();
+                                        },
+                                        'error' : function(r) {
+                                            assert.ok(false);
+                                            done();
+                                        }
+                                    })
+                                },
+                                'error' : function(r) {
+                                    assert.ok(false);
+                                    done();
+                                }
+                            })
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to add channels to registration id and namespace', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id   = 'reg-' + Math.random();
+            var user_id  = 'user-' + Math.random();
+            pubnub.registry({
+                'registry_id'   : reg_id,
+                'namespace'          : user_id,
+                'add_channels'  : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'namespace'       : user_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            var channel = 'd-' + Math.random();
+                            channels.push(channel);
+                            pubnub.registry({
+                                'add_channels' : [channel],
+                                'registry_id'       : reg_id,
+                                'namespace'    : user_id,
+                                'callback' : function(r) {
+                                    pubnub.registry({
+                                        'registry_id' : reg_id,
+                                        'namespace'  : user_id,
+                                        'callback' : function(r) {
+                                            assert.deepEqual(r, channels);
+                                            done();
+                                        },
+                                        'error' : function(r) {
+                                            assert.ok(false);
+                                            done();
+                                        }
+                                    })
+                                },
+                                'error' : function(r) {
+                                    assert.ok(false);
+                                    done();
+                                }
+                            })
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to remove channels from registration id', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id = 'reg-' + Math.random();
+            pubnub.registry({
+                'registry_id' : reg_id,
+                'add_channels' : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            var channel = channels.pop();
+                            pubnub.registry({
+                                'remove_channels' : [channel],
+                                'registry_id'       : reg_id,
+                                'callback' : function(r) {
+                                    pubnub.registry({
+                                        'registry_id' : reg_id,
+                                        'callback' : function(r) {
+                                            assert.deepEqual(r, channels);
+                                            done();
+                                        },
+                                        'error' : function(r) {
+                                            assert.ok(false);
+                                            done();
+                                        }
+                                    })
+                                },
+                                'error' : function(r) {
+                                    assert.ok(false);
+                                    done();
+                                }
+                            })
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to remove channels from registration id and namespace', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id   = 'reg-' + Math.random();
+            var user_id  = 'user-' + Math.random();
+            pubnub.registry({
+                'registry_id'   : reg_id,
+                'namespace'          : user_id,
+                'add_channels'  : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'namespace'       : user_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            var channel = channels.pop();
+                            pubnub.registry({
+                                'remove_channels' : [channel],
+                                'registry_id'       : reg_id,
+                                'namespace'    : user_id,
+                                'callback' : function(r) {
+                                    pubnub.registry({
+                                        'registry_id' : reg_id,
+                                        'namespace'  : user_id,
+                                        'callback' : function(r) {
+                                            assert.deepEqual(r, channels);
+                                            done();
+                                        },
+                                        'error' : function(r) {
+                                            assert.ok(false);
+                                            done();
+                                        }
+                                    })
+                                },
+                                'error' : function(r) {
+                                    assert.ok(false);
+                                    done();
+                                }
+                            })
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })  
         }) 
         it('should be able to remove registration id', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id = 'reg-' + Math.random();
+            pubnub.registry({
+                'registry_id' : reg_id,
+                'add_channels' : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            pubnub.registry({
+                                'registry_id'   : reg_id,
+                                'remove_registration_id'  : true,
+                                'callback'      : function(r) {
+                                    assert.deepEqual(r, ["deleted"]);
+                                    pubnub.registry({
+                                        'registry_id'   : reg_id,
+                                        'callback'      : function(r) {
+                                            assert.deepEqual(r, []);
+                                            done();
+                                        },
+                                        'error'         : function(r) {
+                                            assert.ok(false);
+                                            done();
+                                        }
+                                    })
+                                },
+                                'error'         : function(r) {
+                                    assert.ok(false);
+                                    done();
+                                }
+                            })
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         })
         it('should be able to remove registration id and namespace', function(done){
-            assert.ok(false);
-            done();
+            var channels = ['a-' + Math.random(), 'b-' + Math.random(), 'c-' + Math.random()];
+            var reg_id   = 'reg-' + Math.random();
+            var user_id  = 'user-' + Math.random();
+            pubnub.registry({
+                'registry_id'   : reg_id,
+                'namespace'          : user_id,
+                'add_channels'  : channels,
+                'callback' : function(r) {
+                    assert.deepEqual(r,["added"]);
+                    pubnub.registry({
+                        'registry_id'   : reg_id,
+                        'namespace'       : user_id,
+                        'callback'      : function(r) {
+                            assert.deepEqual(r, channels);
+                            pubnub.registry({
+                                'registry_id'   : reg_id,
+                                'namespace'       : user_id,
+                                'remove_registration_id'  : true,
+                                'callback'      : function(r) {
+                                    assert.deepEqual(r, ["deleted"]);
+                                    pubnub.registry({
+                                        'registry_id'   : reg_id,
+                                        'namespace'       : user_id,
+                                        'callback'      : function(r) {
+                                            assert.deepEqual(r, []);
+                                            done();
+                                        },
+                                        'error'         : function(r) {
+                                            assert.ok(false);
+                                            done();
+                                        }
+                                    })
+                                },
+                                'error'         : function(r) {
+                                    assert.ok(false);
+                                    done();
+                                }
+                            })
+                        },
+                        'error'         : function(r) {
+                            assert.ok(false);
+                            done();
+                        }
+                    })
+                },
+                'error' : function(r) {
+                    assert.ok(false);
+                    done();
+                }
+            })
         }) 
 
     })
