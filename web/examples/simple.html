@@ -2,15 +2,19 @@
 <script src="../pubnub.js"></script>
 <script>(function(){
     // INIT PubNub
-    console.log(PUBNUB);
     var pubnub = PUBNUB.init({
         publish_key   : 'demo',
-        subscribe_key : 'demo'
+        subscribe_key : 'demo',
+        keepalive : 3
     });
     pubnub.subscribe({
-        callback : function(r){console.log(r);},
-        error : function(r){ console.log(r);},
-        channel : "abcd"
+        callback : function(r){console.log(JSON.stringify(r));},
+        error : function(r){ console.log('ERROR : ' + JSON.stringify(r));},
+        connect : function(r){ console.log('CONNECT : ' + JSON.stringify(r));},
+        disconnect : function(r){ console.log('DISCONNECT : ' + JSON.stringify(r));},
+        reconnect : function(r){ console.log('RECONNECT : ' + JSON.stringify(r));},
+        channel : "abcd",
+        heartbeat : 10
     })
 
 
