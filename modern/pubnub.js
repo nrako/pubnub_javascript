@@ -1392,6 +1392,8 @@ function PN_API(setup) {
         SUB_RECEIVER = null;
     }
 
+    // SELF['_reset_offline'] = _reset_offline;  // missing ???
+
     if (!UUID) UUID = SELF['uuid']();
     db['set']( SUBSCRIBE_KEY + 'uuid', UUID );
 
@@ -2733,7 +2735,7 @@ function bind( type, el, fun ) {
     each( type.split(','), function(etype) {
         var rapfun = function(e) {
             if (!e) e = window.event;
-            if (!fun(e)) {
+            if (fun && !fun(e)) {
                 e.cancelBubble = true;
                 e.returnValue  = false;
                 e.preventDefault && e.preventDefault();
